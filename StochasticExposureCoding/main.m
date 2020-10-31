@@ -3,7 +3,7 @@ clear all
 
 
 %% Parameters
-trialN = 1000;                      % number of trials
+trialN = 500;                      % number of trials
 d = 1;                              % depth(m)
 
 
@@ -56,6 +56,7 @@ stdSet_PN_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_ACO_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_SEC_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_CMB_sim = zeros(size(dummyVariables, 2), 1);
+stdSet_CSMA_sim = zeros(size(dummyVariables, 2), 1);
 
 stdSet_ACO_eq = zeros(size(dummyVariables, 2), 1);
 stdSet_SEC_eq = zeros(size(dummyVariables, 2), 1);
@@ -82,11 +83,20 @@ for N = dummyVariables
     T_SEC = T/(A*p_SEC);
     
     
+    % parameters adjustment for the multiple access technique
+    A_CSMA = A/2;
+    T_CSMA = T_SEC;
+    p_CSMA = 1.1*p_CMB;
+    
+    
     % buffers for estimated depths
     dSet_PN = zeros(trialN, 1);
     dSet_ACO = zeros(trialN, 1);
     dSet_SEC = zeros(trialN, 1);
     dSet_CMB = zeros(trialN, 1);
+    dSet_CSMA = zeros(trialN, 1);
+    
+    ONslots_CSMA = zeros(trialN, 1);
     
     for trial = 1 : trialN
         
@@ -110,6 +120,11 @@ for N = dummyVariables
         d_hat = estimateDepth_CMB(d, c, p_CMB, N, M, A, e_s, e_a, e_i, f_mod, T);
         dSet_CMB(trial, 1) = d_hat;
 
+        
+        % Multiple Access Carrier Sensing
+        [d_hat, M_ON] = estimateDepth_CSMA(d, c, p_CSMA, N, M, A_CSMA, e_s, e_a, e_i, f_mod, T_CSMA);
+        dSet_CSMA(trial, 1) = d_hat;
+        ONslots_CSMA(trial, 1) = M_ON;
 
     end
     
@@ -119,7 +134,9 @@ for N = dummyVariables
     stdSet_ACO_sim(idx, 1) = std(dSet_ACO);
     stdSet_SEC_sim(idx, 1) = std(dSet_SEC);
     stdSet_CMB_sim(idx, 1) = std(dSet_CMB);
+    stdSet_CSMA_sim(idx, 1) = std(dSet_CSMA);
     
+    avg_ONslots_sim(idx, 1) = mean(ONslots_CSMA)
     
     % save depth standard deviations by derived equations
     stdSet_ACO_eq(idx, 1) = c/(2*sqrt(2)*pi*f_mod*sqrt(T))*sqrt(e_s + e_a + N*e_i)/e_s;
@@ -141,6 +158,7 @@ colors = [
   0.2 1 0.2
   0 0 1
   0.8 0 0.8
+  0 1 0.7
 ];
 
 figure; hold on; grid on;
@@ -151,9 +169,10 @@ plot(dummyVariables', 1./stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_SEC_eq, ':', 'color', colors(4, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_eq, ':', 'color', colors(6, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
 xlim([dummyVariables(1), dummyVariables(end)])
 
-legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)')
+legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)')
 set(gca,'FontName','Times New Roman');
-set(gca,'FontSize',16); 
+set(gca,'FontSize',10); 
 
