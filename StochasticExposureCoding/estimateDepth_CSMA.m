@@ -1,4 +1,4 @@
-function [d_hat, M_ON] = estimateDepth_CSMA(d, c, p, N, M, A, e_s, e_a, e_i, f_mod, T)
+function [d_hat, M_ON] = estimateDepth_CSMA(d, c, p, N, M, A, A_SEC, e_s, e_a, e_i, f_mod, T)
 
 
 
@@ -33,10 +33,10 @@ C4 = zeros(sampleN, M_ON);
 
 for m = 1 : M_ON
     
-    C1(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*e_i + A*e_s/2.*cos(2*pi*f_mod.*tau));
-    C2(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*e_i - A*e_s/2.*sin(2*pi*f_mod.*tau));
-    C3(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*e_i - A*e_s/2.*cos(2*pi*f_mod.*tau));
-    C4(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*e_i + A*e_s/2.*sin(2*pi*f_mod.*tau));
+    C1(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A_SEC*e_i + A*e_s/2.*cos(2*pi*f_mod.*tau));
+    C2(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A_SEC*e_i - A*e_s/2.*sin(2*pi*f_mod.*tau));
+    C3(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A_SEC*e_i - A*e_s/2.*cos(2*pi*f_mod.*tau));
+    C4(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A_SEC*e_i + A*e_s/2.*sin(2*pi*f_mod.*tau));
 end
 
 

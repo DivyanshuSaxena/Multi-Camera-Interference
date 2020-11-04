@@ -33,7 +33,6 @@ d_max = c/(2*f_mod);                % Maximum measurable distance(m)
 A = 7;                              % Peak power amplification
 M = 500;                            % Number of slots
 
-
 % Parameters for PN sequence approach
 stageN = 7;                         % Number of LFSR stages
 bitN = 2^stageN - 1;                % Number of bits
@@ -84,7 +83,7 @@ for N = dummyVariables
     
     
     % parameters adjustment for the multiple access technique
-    A_CSMA = A/2;
+    A_CSMA = A / 2;
     T_CSMA = T_SEC;
     p_CSMA = 1.1*p_CMB;
     
@@ -122,7 +121,7 @@ for N = dummyVariables
 
         
         % Multiple Access Carrier Sensing
-        [d_hat, M_ON] = estimateDepth_CSMA(d, c, p_CSMA, N, M, A_CSMA, e_s, e_a, e_i, f_mod, T_CSMA);
+        [d_hat, M_ON] = estimateDepth_CSMA(d, c, p_CSMA, N, M, A_CSMA, A, e_s, e_a, e_i, f_mod, T_CSMA);
         dSet_CSMA(trial, 1) = d_hat;
         ONslots_CSMA(trial, 1) = M_ON;
 
@@ -170,9 +169,12 @@ plot(dummyVariables', 1./stdSet_SEC_eq, ':', 'color', colors(4, :), 'lineWidth',
 plot(dummyVariables', 1./stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_eq, ':', 'color', colors(6, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
-xlim([dummyVariables(1), dummyVariables(end)])
+xlim([dummyVariables(1), dummyVariables(end)]);
 
-legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)')
+legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)');
 set(gca,'FontName','Times New Roman');
-set(gca,'FontSize',10); 
+set(gca,'FontSize',10);
+
+f = gcf;
+exportgraphics(f,'plot.png','Resolution',300);
 
