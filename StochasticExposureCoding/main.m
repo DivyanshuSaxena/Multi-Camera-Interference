@@ -83,10 +83,10 @@ for N = dummyVariables
     
     
     % parameters adjustment for the multiple access technique
-    A_CSMA = A / 2;
+    A_CSMA = A;
     T_CSMA = T_SEC;
     p_CSMA = 1.1*p_CMB;
-    
+    frac_CSMA = 0.5;
     
     % buffers for estimated depths
     dSet_PN = zeros(trialN, 1);
@@ -121,7 +121,7 @@ for N = dummyVariables
 
         
         % Multiple Access Carrier Sensing
-        [d_hat, M_ON] = estimateDepth_CSMA(d, c, p_CSMA, N, M, A_CSMA, A, e_s, e_a, e_i, f_mod, T_CSMA);
+        [d_hat, M_ON] = estimateDepth_CSMA(d, c, p_CSMA, N, M, A_CSMA, A, e_s, e_a, e_i, f_mod, T_CSMA, frac_CSMA);
         dSet_CSMA(trial, 1) = d_hat;
         ONslots_CSMA(trial, 1) = M_ON;
 

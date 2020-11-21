@@ -1,11 +1,11 @@
-function [d_hat, M_ON] = estimateDepth_CSMA(d, c, p, N, M, A, A_SEC, e_s, e_a, e_i, f_mod, T)
+function [d_hat, M_ON] = estimateDepth_CSMA(d, c, p, N, M, A, A_SEC, e_s, e_a, e_i, f_mod, T, frac)
 
 
 
 %% Parameters
 tau = 2*d/c;                                        % time-of-flight
 sampleN = size(e_s, 1);                             % number of samples
-Tslot = T/M;                                        % slot integration time
+Tslot = frac*T/M;                                   % slot integration time
 
 
 
@@ -19,7 +19,7 @@ start = 2*rand(N, 1) - 1;                           % -1.0 ~ 1.0
 
 
 %% Estimate interference amount due to the interfering cameras
-[itfAmnt, ONIdx] = estItfAmntCSMA(N, binarySeq, start);   % 1 by M vector where each element contains the interference amount
+[itfAmnt, ONIdx] = estItfAmntCSMA(N, binarySeq, start, frac);   % 1 by M vector where each element contains the interference amount
 M_ON = size(itfAmnt, 2);
 assert(size(itfAmnt, 2) == size(ONIdx, 2));
 
