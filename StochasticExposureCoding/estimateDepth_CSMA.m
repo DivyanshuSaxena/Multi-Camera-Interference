@@ -5,7 +5,7 @@ function [d_hat, M_ON] = estimateDepth_CSMA(d, c, p, N, M, A, A_SEC, e_s, e_a, e
 %% Parameters
 tau = 2*d/c;                                        % time-of-flight
 sampleN = size(e_s, 1);                             % number of samples
-Tslot = frac*T/M;                                   % slot integration time
+Tslot = (1-frac)*T/M;                               % slot integration time
 
 
 

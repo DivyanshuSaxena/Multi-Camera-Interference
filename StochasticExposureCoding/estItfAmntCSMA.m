@@ -21,7 +21,7 @@ for n = 1 : N
         % overlapping slot of the primary camera, otherwise put an OFF for
         % the overlapping slot as well.        
         ONIdxItfNext = ONIdxItf - 1;
-        if startOneCam < 1 - frac
+        if abs(startOneCam) < 1 - frac
             [itfIdx, itfOrderMsr, itfOrderItf] = intersect(ONIdx, ONIdxItfNext);
             itfAmnt(1, itfOrderMsr) = itfAmnt(1, itfOrderMsr) + abs(startOneCam); 
         else
@@ -48,7 +48,6 @@ for n = 1 : N
             [itfIdx, itfOrderMsr, itfOrderItf] = intersect(ONIdx, ONIdxItf);
             ONIdx(itfOrderMsr) = [];
         end
-        
     end
       
 end

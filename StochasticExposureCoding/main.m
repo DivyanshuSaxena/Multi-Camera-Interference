@@ -83,10 +83,10 @@ for N = dummyVariables
     
     
     % parameters adjustment for the multiple access technique
-    A_CSMA = A;
+    A_CSMA = A / 2;
     T_CSMA = T_SEC;
     p_CSMA = 1.1*p_CMB;
-    frac_CSMA = 0.5;
+    frac_CSMA = 0.1;
     
     % buffers for estimated depths
     dSet_PN = zeros(trialN, 1);
