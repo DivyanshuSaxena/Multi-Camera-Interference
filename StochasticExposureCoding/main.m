@@ -128,13 +128,23 @@ for N = dummyVariables
     end
     
     
+    
     % save depth standard deviations by simulations
-    stdSet_PN_sim(idx, 1) = std(dSet_PN);
+    %{
+    stdSet_PN_sim(idx, 1) = = std(dSet_PN); 
     stdSet_ACO_sim(idx, 1) = std(dSet_ACO);
     stdSet_SEC_sim(idx, 1) = std(dSet_SEC);
     stdSet_CMB_sim(idx, 1) = std(dSet_CMB);
     stdSet_CSMA_sim(idx, 1) = std(dSet_CSMA);
+    %}
     
+    % save the mean squared error between simulated and actual depth
+    stdSet_PN_sim(idx, 1) = sqrt(sum((dSet_PN - d).^2) / trialN); 
+    stdSet_ACO_sim(idx, 1) = sqrt(sum((dSet_ACO - d).^2) / trialN);
+    stdSet_SEC_sim(idx, 1) = sqrt(sum((dSet_SEC - d).^2) / trialN);
+    stdSet_CMB_sim(idx, 1) = sqrt(sum((dSet_CMB - d).^2) / trialN);
+    stdSet_CSMA_sim(idx, 1) = sqrt(sum((dSet_CSMA - d).^2) / trialN);
+
     avg_ONslots_sim(idx, 1) = mean(ONslots_CSMA)
     
     % save depth standard deviations by derived equations
@@ -147,8 +157,6 @@ for N = dummyVariables
     idx = idx + 1;
 end
 
-
-
 %% Visualize results: compare inverse depth standard devations (higher is better)
 colors = [
   1 0 0;
@@ -160,18 +168,35 @@ colors = [
   0 1 0.7
 ];
 
+%% Use this code for plotting standard deviation of estimated depth.
+
+%{
 figure; hold on; grid on;
-plot(dummyVariables', 1./stdSet_PN_sim, 'color', [0, 0, 0], 'lineWidth', 4);
-plot(dummyVariables', 1./stdSet_ACO_sim, 'color', colors(1, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_PN_sim, 'color', [0, 0, 0], 'lineWidth', 4);
+plot(dummyVariables', stdSet_ACO_sim, 'color', colors(1, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_ACO_eq, ':', 'color', colors(2, :), 'lineWidth', 4);
-plot(dummyVariables', 1./stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_SEC_eq, ':', 'color', colors(4, :), 'lineWidth', 4);
-plot(dummyVariables', 1./stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_eq, ':', 'color', colors(6, :), 'lineWidth', 4);
-plot(dummyVariables', 1./stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
 xlim([dummyVariables(1), dummyVariables(end)]);
 
 legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)');
+%}
+
+%% Use this code for plotting mean squared error between estimated depth and actual depth.
+
+figure; hold on; grid on;
+plot(dummyVariables', stdSet_PN_sim, 'color', [0, 0, 0], 'lineWidth', 4);
+plot(dummyVariables', stdSet_ACO_sim, 'color', colors(1, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
+plot(dummyVariables', stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
+xlim([dummyVariables(1), dummyVariables(end)]);
+
+legend('PN', 'ACO(sim)', 'SEC(sim)', 'CMB(sim)', 'CSMA(sim)');
+
 set(gca,'FontName','Times New Roman');
 set(gca,'FontSize',10);
 
