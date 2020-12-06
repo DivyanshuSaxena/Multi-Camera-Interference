@@ -131,7 +131,7 @@ for N = dummyVariables
     
     % save depth standard deviations by simulations
     %{
-    stdSet_PN_sim(idx, 1) = = std(dSet_PN); 
+    stdSet_PN_sim(idx, 1) = std(dSet_PN); 
     stdSet_ACO_sim(idx, 1) = std(dSet_ACO);
     stdSet_SEC_sim(idx, 1) = std(dSet_SEC);
     stdSet_CMB_sim(idx, 1) = std(dSet_CMB);
