@@ -172,14 +172,14 @@ colors = [
 
 %{
 figure; hold on; grid on;
-plot(dummyVariables', stdSet_PN_sim, 'color', [0, 0, 0], 'lineWidth', 4);
-plot(dummyVariables', stdSet_ACO_sim, 'color', colors(1, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_PN_sim, 'color', [0, 0, 0], 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_ACO_sim, 'color', colors(1, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_ACO_eq, ':', 'color', colors(2, :), 'lineWidth', 4);
-plot(dummyVariables', stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_SEC_sim, 'color', colors(3, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_SEC_eq, ':', 'color', colors(4, :), 'lineWidth', 4);
-plot(dummyVariables', stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_eq, ':', 'color', colors(6, :), 'lineWidth', 4);
-plot(dummyVariables', stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
 xlim([dummyVariables(1), dummyVariables(end)]);
 
 legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)');
