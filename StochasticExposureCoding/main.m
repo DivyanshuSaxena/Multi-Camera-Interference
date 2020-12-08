@@ -3,7 +3,7 @@ clear all
 
 
 %% Parameters
-trialN = 500;                      % number of trials
+trialN = 100;                      % number of trials
 d = 1;                              % depth(m)
 
 
@@ -56,6 +56,7 @@ stdSet_ACO_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_SEC_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_CMB_sim = zeros(size(dummyVariables, 2), 1);
 stdSet_CSMA_sim = zeros(size(dummyVariables, 2), 1);
+stdSet_MAAll_sim = zeros(size(dummyVariables, 2), 1);
 
 stdSet_ACO_eq = zeros(size(dummyVariables, 2), 1);
 stdSet_SEC_eq = zeros(size(dummyVariables, 2), 1);
@@ -86,6 +87,7 @@ for N = dummyVariables
     A_CSMA = A / 2;
     T_CSMA = T_SEC;
     p_CSMA = 1.1*p_CMB;
+    p_MAAll = 0.1;
     frac_CSMA = 0.1;
     
     % buffers for estimated depths
@@ -94,8 +96,10 @@ for N = dummyVariables
     dSet_SEC = zeros(trialN, 1);
     dSet_CMB = zeros(trialN, 1);
     dSet_CSMA = zeros(trialN, 1);
+    dSet_MAAll = zeros(trialN, 1);
     
     ONslots_CSMA = zeros(trialN, 1);
+    ONslots_MAAll = zeros(trialN, 1);
     
     for trial = 1 : trialN
         
@@ -125,6 +129,12 @@ for N = dummyVariables
         dSet_CSMA(trial, 1) = d_hat;
         ONslots_CSMA(trial, 1) = M_ON;
 
+        
+        % Multiple Access Carrier Sensing for all cameras
+        [d_hat, M_ON] = estimateDepth_AllCSMA(d, c, p_MAAll, N, M, A_CSMA, e_s, e_a, e_i, f_mod, T_CSMA, frac_CSMA);
+        dSet_MAAll(trial, 1) = d_hat;
+        ONslots_MAAll(trial, 1) = M_ON;
+
     end
     
     
@@ -134,8 +144,9 @@ for N = dummyVariables
     stdSet_SEC_sim(idx, 1) = std(dSet_SEC);
     stdSet_CMB_sim(idx, 1) = std(dSet_CMB);
     stdSet_CSMA_sim(idx, 1) = std(dSet_CSMA);
+    stdSet_MAAll_sim(idx, 1) = std(dSet_MAAll);
     
-    avg_ONslots_sim(idx, 1) = mean(ONslots_CSMA)
+    avg_ONslots_sim(idx, 1) = mean(ONslots_MAAll)
     
     % save depth standard deviations by derived equations
     stdSet_ACO_eq(idx, 1) = c/(2*sqrt(2)*pi*f_mod*sqrt(T))*sqrt(e_s + e_a + N*e_i)/e_s;
@@ -158,6 +169,7 @@ colors = [
   0 0 1
   0.8 0 0.8
   0 1 0.7
+  0.5 0.5 0.5
 ];
 
 figure; hold on; grid on;
@@ -169,9 +181,10 @@ plot(dummyVariables', 1./stdSet_SEC_eq, ':', 'color', colors(4, :), 'lineWidth',
 plot(dummyVariables', 1./stdSet_CMB_sim, 'color', colors(5, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CMB_eq, ':', 'color', colors(6, :), 'lineWidth', 4);
 plot(dummyVariables', 1./stdSet_CSMA_sim, 'color', colors(7, :), 'lineWidth', 4);
+plot(dummyVariables', 1./stdSet_MAAll_sim, 'color', colors(8, :), 'lineWidth', 4);
 xlim([dummyVariables(1), dummyVariables(end)]);
 
-legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)');
+legend('PN', 'ACO(sim)', 'ACO(eq)', 'SEC(sim)', 'SEC(eq)', 'CMB(sim)', 'CMB(eq)', 'CSMA(sim)', 'MA-All(sim)');
 set(gca,'FontName','Times New Roman');
 set(gca,'FontSize',10);
 
