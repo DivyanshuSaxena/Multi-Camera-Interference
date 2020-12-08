@@ -19,8 +19,9 @@ start = 2*rand(N, 1) - 1;                           % -1.0 ~ 1.0
 
 
 %% Estimate interference amount due to the interfering cameras
-[ONIdx] = estItfAmntAllCSMA(binarySeq, start);   % 1 by M vector where each element contains the interference amount
-M_ON = size(ONIdx, 2);
+[itfAmnt, ONIdx] = estItfAmntAllCSMA(frac, binarySeq, start);   % 1 by M vector where each element contains the interference amount
+M_ON = size(itfAmnt, 2);
+assert(size(itfAmnt, 2) == size(ONIdx, 2));
 
 
 
@@ -30,15 +31,15 @@ C2 = zeros(sampleN, M_ON);
 C3 = zeros(sampleN, M_ON);
 C4 = zeros(sampleN, M_ON);
 
-% Presently, assuming perfect coordination, we say no interference.
-itfAmnt = 0;
+% Changed -- Presently, assuming perfect coordination, we say no interference.
+% itfAmnt = 0;
 
 for m = 1 : M_ON
-    
-    C1(:, m) = Tslot*(A*e_s + e_a + A*e_s/2.*cos(2*pi*f_mod.*tau));
-    C2(:, m) = Tslot*(A*e_s + e_a - A*e_s/2.*sin(2*pi*f_mod.*tau));
-    C3(:, m) = Tslot*(A*e_s + e_a - A*e_s/2.*cos(2*pi*f_mod.*tau));
-    C4(:, m) = Tslot*(A*e_s + e_a + A*e_s/2.*sin(2*pi*f_mod.*tau));
+
+    C1(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A*e_i + A*e_s/2.*cos(2*pi*f_mod.*tau));
+    C2(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A*e_i - A*e_s/2.*sin(2*pi*f_mod.*tau));
+    C3(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A*e_i - A*e_s/2.*cos(2*pi*f_mod.*tau));
+    C4(:, m) = Tslot*(A*e_s + e_a + itfAmnt(1, m)*A*e_i + A*e_s/2.*sin(2*pi*f_mod.*tau));
 end
 
 

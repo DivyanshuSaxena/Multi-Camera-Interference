@@ -3,7 +3,7 @@ clear all
 
 
 %% Parameters
-trialN = 100;                      % number of trials
+trialN = 10;                      % number of trials
 d = 1;                              % depth(m)
 
 
@@ -87,8 +87,9 @@ for N = dummyVariables
     A_CSMA = A / 2;
     T_CSMA = T_SEC;
     p_CSMA = 1.1*p_CMB;
-    p_MAAll = 0.1;
+    p_MAAll = 0.9;
     frac_CSMA = 0.1;
+    frac_MAAll = 0.1;
     
     % buffers for estimated depths
     dSet_PN = zeros(trialN, 1);
@@ -131,7 +132,7 @@ for N = dummyVariables
 
         
         % Multiple Access Carrier Sensing for all cameras
-        [d_hat, M_ON] = estimateDepth_AllCSMA(d, c, p_MAAll, N, M, A_CSMA, e_s, e_a, e_i, f_mod, T_CSMA, frac_CSMA);
+        [d_hat, M_ON] = estimateDepth_AllCSMA(d, c, p_MAAll, N, M, A_CSMA, e_s, e_a, e_i, f_mod, T_CSMA, frac_MAAll);
         dSet_MAAll(trial, 1) = d_hat;
         ONslots_MAAll(trial, 1) = M_ON;
 
